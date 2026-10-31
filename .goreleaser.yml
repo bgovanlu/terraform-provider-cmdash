@@ -1,0 +1,103 @@
+# GoReleaser configuration for the `cmdash` Terraform provider.
+# ROADMAP-V80 H2 — see docs/terraform-provider.md's "Release process" section.
+#
+# Adapted from HashiCorp's own terraform-provider-scaffolding-framework
+# .goreleaser.yml (verified against
+# https://github.com/hashicorp/terraform-provider-scaffolding-framework at
+# build time, not reproduced from memory), which is the config every
+# terraform-plugin-framework provider ships to satisfy the public registry's
+# artifact-naming and signing contract. Nothing here is
+# cmdash-specific beyond `project_name` — nothing in this repo's release
+# tooling has ever driven goreleaser before, so there was no prior
+# convention to reconcile.
+#
+# Inert without a GPG key: the `signs` block below requires
+# GPG_FINGERPRINT (set by .github/workflows/release-terraform-provider.yml
+# ONLY when the GPG_PRIVATE_KEY repository secret exists — an owner
+# action, see docs/implementation-plan-v80.md §9). Running
+# `goreleaser release` locally without that secret/env var fails at the
+# signing step; `goreleaser build --snapshot --clean` (no signing, no
+# publish) works with no secrets at all and is the local smoke-test path.
+version: 2
+
+project_name: terraform-provider-cmdash
+
+before:
+  hooks:
+    # Not a requirement for provider building/publishing — matches upstream's
+    # own comment. go.sum is already committed; this is a drift check, not a
+    # mutation goreleaser depends on.
+    - go mod tidy
+
+builds:
+  - env:
+      # goreleaser does not support CGO cross-compilation, and Terraform's
+      # own CI environments (HCP Terraform, GitHub Actions runners) can't
+      # assume the target's C toolchain is present either.
+      - CGO_ENABLED=0
+    mod_timestamp: '{{ .CommitTimestamp }}'
+    flags:
+      - -trimpath
+    ldflags:
+      - '-s -w -X main.version={{.Version}} -X main.commit={{.Commit}}'
+    goos:
+      - freebsd
+      - windows
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - '386'
+      - arm
+      - arm64
+      - s390x
+    ignore:
+      - goos: darwin
+        goarch: '386'
+      - goos: darwin
+        goarch: s390x
+      - goos: freebsd
+        goarch: s390x
+      - goos: windows
+        goarch: arm
+      - goos: windows
+        goarch: s390x
+    binary: '{{ .ProjectName }}_v{{ .Version }}'
+
+archives:
+  - formats:
+      - zip
+    name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
+
+checksum:
+  extra_files:
+    - glob: 'terraform-registry-manifest.json'
+      name_template: '{{ .ProjectName }}_{{ .Version }}_manifest.json'
+  name_template: '{{ .ProjectName }}_{{ .Version }}_SHA256SUMS'
+  algorithm: sha256
+
+signs:
+  - artifacts: checksum
+    args:
+      # release-terraform-provider.yml runs goreleaser non-interactively —
+      # --batch is required or gpg blocks waiting for a passphrase prompt
+      # that will never come.
+      - "--batch"
+      - "--local-user"
+      - "{{ .Env.GPG_FINGERPRINT }}"
+      - "--output"
+      - "${signature}"
+      - "--detach-sign"
+      - "${artifact}"
+
+release:
+  extra_files:
+    - glob: 'terraform-registry-manifest.json'
+      name_template: '{{ .ProjectName }}_{{ .Version }}_manifest.json'
+  # Not a draft: release-terraform-provider.yml only invokes `goreleaser
+  # release` on the branch where GPG_PRIVATE_KEY is confirmed present (see
+  # that workflow), so by the time this runs the release is meant to be
+  # published outright, not held for manual review.
+
+changelog:
+  disable: true

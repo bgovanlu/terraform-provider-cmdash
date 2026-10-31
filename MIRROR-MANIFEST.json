@@ -1,0 +1,115 @@
+{
+  "repo": "bgovanlu/terraform-provider-cmdash",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "sources": [
+    "terraform-provider-cmdash",
+    "packages/shared/src/envelope/envelope-contract.fixture.json"
+  ],
+  "files": {
+    ".github/workflows/ci.yml": {
+      "sha256": "ad83e72c0fe6243a0b758023e8e70db5707fadcbd40a53d7d9998e777b158a12",
+      "mode": "100644"
+    },
+    ".github/workflows/publish.yml": {
+      "sha256": "7e8d76187e203eea9dd2b5c3358b01b6708a84055f59366411e9c7b4c309dbbb",
+      "mode": "100644"
+    },
+    ".goreleaser.yml": {
+      "sha256": "f62590d7946dcb4fda835697bbe17f1b7704d2e531fd3cac3d7f78af56cd5dab",
+      "mode": "100644"
+    },
+    "LICENSE": {
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "mode": "100644"
+    },
+    "NOTICE": {
+      "sha256": "05c195dc58d9bb34b3a05ecada5d2d501e0468017aaaa7f635a8d49919ec1e2f",
+      "mode": "100644"
+    },
+    "README.md": {
+      "sha256": "bdd5f3b190688e66a13cbd2925a14dd5481be8f15afa8a73502863d5c60a2675",
+      "mode": "100644"
+    },
+    "SECURITY.md": {
+      "sha256": "e21fcfa598f3547b51a260890067c233734ae028a9c16e8b4f877464a3e7b464",
+      "mode": "100644"
+    },
+    "THIRD_PARTY_NOTICES.md": {
+      "sha256": "3bc806ee0494a48d71dd3c5b13dfc05321da518d58f0977e513d510f91ec917d",
+      "mode": "100644"
+    },
+    "examples/basic/main.tf": {
+      "sha256": "fd4aa88c36316fae7d015ecf834f269db91bbb60ba6bab3984f34812cd358d41",
+      "mode": "100644"
+    },
+    "go.mod": {
+      "sha256": "3b4b8c3e401d3d6b5058b6ac827d0f293d9b761e7a65b361c9029cab3808fdcc",
+      "mode": "100644"
+    },
+    "go.sum": {
+      "sha256": "13ab8fe6d10899ec1ed787ffb6a15c77bd9ed3c8e5ad7fe20ac8578e9d35df17",
+      "mode": "100644"
+    },
+    "internal/client/client.go": {
+      "sha256": "7b421a182826315928d1de4feb1dd163eb19edf41a97d59e5a4d0b69b549786d",
+      "mode": "100644"
+    },
+    "internal/client/client_test.go": {
+      "sha256": "2fd3675108fc39597c6ef4d8d72995a8abcee39928a8c66f27427fe207cab4a8",
+      "mode": "100644"
+    },
+    "internal/client/envelope_contract_test.go": {
+      "sha256": "ea2f10af2ee61208813d9425e4dc02d46b2d03aee5a234b46cb8de5f528f61d9",
+      "mode": "100644"
+    },
+    "internal/client/readonly.go": {
+      "sha256": "9fa804d6506e91feb433353a0bce864b1a66364d98fa364ff5513edae163e0b0",
+      "mode": "100644"
+    },
+    "internal/client/testdata/envelope-contract.fixture.json": {
+      "sha256": "33892bf7365d1b2400cb818e7b3eeded0d7a2c737e1778c3c3f96eb1a5f1e3d3",
+      "mode": "100644"
+    },
+    "internal/client/webhooks.go": {
+      "sha256": "12aaa77337909fe0d487d0f475b83c9adb8a141bf38668b86ddd3b2cff7e6e6e",
+      "mode": "100644"
+    },
+    "internal/provider/data_source_compliance_frameworks.go": {
+      "sha256": "31060168e4eb3bdf4cf542d1f10fba656661c56b26f6d722067cf91c5952db02",
+      "mode": "100644"
+    },
+    "internal/provider/data_source_framework_controls.go": {
+      "sha256": "5441fe83dd6d2ec1d9162de0c14820f1a0208b86cc644bee51bdc08eaef01b59",
+      "mode": "100644"
+    },
+    "internal/provider/data_source_integration_connections.go": {
+      "sha256": "cd1794b9e634e9623387e28832efc5902d6bd0c7892549eb7d3db03412c310a8",
+      "mode": "100644"
+    },
+    "internal/provider/provider.go": {
+      "sha256": "d6c9ea74c8f82dd56f7373adf6ec87272e4b265d871b0017a23a7532b0bf49e9",
+      "mode": "100644"
+    },
+    "internal/provider/resource_webhook_registration.go": {
+      "sha256": "38314060c2322e80373f20e687368aff848df045f1d91c35791e8b288cf5ec3c",
+      "mode": "100644"
+    },
+    "internal/provider/resource_webhook_registration_test.go": {
+      "sha256": "8a955ff9884e750a0daaab78eb6214445a1b4016d8d52f2fc3b588d8c2890a3b",
+      "mode": "100644"
+    },
+    "main.go": {
+      "sha256": "a53844004c37000fba3a84943fba4e60b4e8397ffa7ce0699447abba2be96d4a",
+      "mode": "100644"
+    },
+    "packages/shared/src/envelope/envelope-contract.fixture.json": {
+      "sha256": "33892bf7365d1b2400cb818e7b3eeded0d7a2c737e1778c3c3f96eb1a5f1e3d3",
+      "mode": "100644"
+    },
+    "terraform-registry-manifest.json": {
+      "sha256": "890df766e9b839623b1f0437355032a3c006226a6c200cd911e15ee1a9014e9f",
+      "mode": "100644"
+    }
+  }
+}

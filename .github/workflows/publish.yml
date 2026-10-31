@@ -1,0 +1,49 @@
+name: Publish
+
+# INERT until the owner adds the GPG_PRIVATE_KEY and PASSPHRASE repository secrets and registers the provider with the Terraform Registry.
+# A v* tag pushed before then runs the tests, publishes nothing and exits 0 with a notice.
+on:
+  push:
+    tags:
+      - 'v*'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write # goreleaser attaches the signed archives to the GitHub release
+
+jobs:
+  release:
+    name: Test and release
+    runs-on: ubuntu-latest
+    env:
+      GPG_KEY_SET: ${{ secrets.GPG_PRIVATE_KEY != '' }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: go.mod
+      - name: Test
+        run: go test ./...
+      - name: Import the signing key
+        if: env.GPG_KEY_SET == 'true'
+        id: gpg
+        uses: crazy-max/ghaction-import-gpg@2dc316deee8e90f13e1a351ab510b4d5bc0c82cd # v7.0.0
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+      - name: Release with goreleaser
+        if: env.GPG_KEY_SET == 'true'
+        uses: goreleaser/goreleaser-action@a4f02ab5355a589de60d917a659ce617ed19b3de # v7.3.0
+        with:
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GPG_FINGERPRINT: ${{ steps.gpg.outputs.fingerprint }}
+      - name: GPG_PRIVATE_KEY not configured - skipping release
+        if: env.GPG_KEY_SET != 'true'
+        run: echo "::notice::GPG_PRIVATE_KEY is not set, so ${GITHUB_REF_NAME} was tested but NOT released."
